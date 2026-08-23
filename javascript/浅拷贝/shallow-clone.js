@@ -34,7 +34,7 @@ const cloneBySpread = (obj) => ({ ...obj });
  * copy.a = 99;          // 不影响源对象
  * copy.arr[0] = 99;     // 源对象 arr[0] 也变 99（嵌套仍共享引用）
  */
-function shallowClone(obj) {
+const shallowClone = (obj) => {
   if (obj === null || typeof obj !== 'object') return obj;
 
   const ctor = obj.constructor;
@@ -46,4 +46,4 @@ function shallowClone(obj) {
     }
   }
   return result;
-}
+};

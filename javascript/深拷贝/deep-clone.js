@@ -26,7 +26,7 @@ const cloneByJSON = (obj) => JSON.parse(JSON.stringify(obj));
  * src.self = src;
  * const copy = deepClone(src); // copy.self === copy
  */
-function deepClone(obj, hash = new WeakMap()) {
+const deepClone = (obj, hash = new WeakMap()) => {
   // 原始值与函数直接返回
   if (obj === null || typeof obj !== 'object') return obj;
 
@@ -60,4 +60,4 @@ function deepClone(obj, hash = new WeakMap()) {
   });
 
   return result;
-}
+};
