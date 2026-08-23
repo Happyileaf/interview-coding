@@ -1,10 +1,31 @@
-// 深拷贝实现：递归复制所有层级，处理循环引用与特殊对象
+/**
+ * 深拷贝实现
+ * 递归复制所有层级，处理循环引用与特殊对象
+ */
 
-// 方式 1：JSON 序列化（简单但有局限）
-// 局限：丢失函数、undefined、Symbol；Date 变字符串；RegExp 丢失；无法处理循环引用
+/**
+ * 使用 JSON 序列化进行深拷贝
+ *
+ * @description 简单但有局限：丢失函数、undefined、Symbol；Date 变字符串；RegExp 丢失；无法处理循环引用
+ * @param obj - 源对象
+ * @returns 深拷贝后的对象
+ * @example
+ * const copy = cloneByJSON({ a: 1, nested: { b: 2 } });
+ */
 const cloneByJSON = (obj) => JSON.parse(JSON.stringify(obj));
 
-// 方式 2：递归实现，使用 WeakMap 解决循环引用
+/**
+ * 递归深拷贝
+ *
+ * @description 使用 WeakMap 解决循环引用，支持 Date、RegExp、Map、Set、Symbol 键
+ * @param obj - 任意值
+ * @param hash - 已拷贝对象的映射，用于解决循环引用
+ * @returns 深拷贝后的值
+ * @example
+ * const src = { a: 1, self: null };
+ * src.self = src;
+ * const copy = deepClone(src); // copy.self === copy
+ */
 function deepClone(obj, hash = new WeakMap()) {
   // 原始值与函数直接返回
   if (obj === null || typeof obj !== 'object') return obj;
@@ -12,13 +33,9 @@ function deepClone(obj, hash = new WeakMap()) {
   // 已拷贝过的对象直接复用，避免循环引用导致栈溢出
   if (hash.has(obj)) return hash.get(obj);
 
-  // 处理 Date
   if (obj instanceof Date) return new Date(obj);
-
-  // 处理 RegExp
   if (obj instanceof RegExp) return new RegExp(obj);
 
-  // 处理 Map / Set
   if (obj instanceof Map) {
     const map = new Map();
     hash.set(obj, map);
@@ -32,7 +49,7 @@ function deepClone(obj, hash = new WeakMap()) {
     return set;
   }
 
-  // 普通对象 / 数组：按原型创建同类型实例
+  // 按原型创建同类型实例
   const ctor = obj.constructor;
   const result = Array.isArray(obj) ? [] : new ctor();
   hash.set(obj, result);
@@ -44,10 +61,3 @@ function deepClone(obj, hash = new WeakMap()) {
 
   return result;
 }
-
-// 验证
-// const src = { a: 1, arr: [2, 3], self: null };
-// src.self = src;             // 循环引用
-// const copy = deepClone(src);
-// console.log(copy.arr !== src.arr);  // true
-// console.log(copy.self === copy);     // true

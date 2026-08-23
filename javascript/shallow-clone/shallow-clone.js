@@ -1,12 +1,39 @@
-// 浅拷贝实现：只复制第一层，嵌套对象仍为引用
+/**
+ * 浅拷贝实现
+ * 只复制第一层，嵌套对象仍为引用
+ */
 
-// 方式 1：Object.assign
+/**
+ * 使用 Object.assign 进行浅拷贝
+ *
+ * @param obj - 源对象
+ * @returns 浅拷贝后的新对象
+ * @example
+ * const copy = cloneByAssign({ a: 1 });
+ */
 const cloneByAssign = (obj) => Object.assign({}, obj);
 
-// 方式 2：展开运算符
+/**
+ * 使用展开运算符进行浅拷贝
+ *
+ * @param obj - 源对象
+ * @returns 浅拷贝后的新对象
+ * @example
+ * const copy = cloneBySpread({ a: 1 });
+ */
 const cloneBySpread = (obj) => ({ ...obj });
 
-// 方式 3：手动遍历（含数组支持）
+/**
+ * 手动遍历进行浅拷贝
+ *
+ * @description 按原型创建同类型实例，遍历自身可枚举属性逐一赋值，支持数组
+ * @param obj - 源对象或数组
+ * @returns 浅拷贝后的新对象或数组
+ * @example
+ * const copy = shallowClone({ a: 1, arr: [2, 3] });
+ * copy.a = 99;          // 不影响源对象
+ * copy.arr[0] = 99;     // 源对象 arr[0] 也变 99（嵌套仍共享引用）
+ */
 function shallowClone(obj) {
   if (obj === null || typeof obj !== 'object') return obj;
 
@@ -20,9 +47,3 @@ function shallowClone(obj) {
   }
   return result;
 }
-
-// 验证：嵌套对象仍共享引用
-// const src = { a: 1, nested: { b: 2 } };
-// const copy = shallowClone(src);
-// copy.a = 99;          // 不影响 src
-// copy.nested.b = 99;    // src.nested.b 也变 99
