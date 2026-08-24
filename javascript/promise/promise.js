@@ -30,6 +30,10 @@ function _Promise(executor) {
   /** 将状态置为 fulfilled 并触发成功回调 */
   const resolve = (value) => {
     if (this.state !== PENDING) return;
+    if (value instanceof _Promise) {
+      value.then(resolve, reject);
+      return;
+    }
     this.state = FULFILLED;
     this.value = value;
     this.onFulfilledCbs.forEach((fn) => fn());
