@@ -116,7 +116,7 @@ _Promise.resolve = function (value) {
  * @description 静态方法直接挂在构造函数上
  */
 _Promise.reject = function (reason) {
-  return new _Promise((_, r) => r(reason));
+  return new _Promise((_, reject) => reject(reason));
 };
 
 /**
