@@ -14,10 +14,6 @@ const REJECTED = 'rejected';
  * 自定义 Promise 构造函数
  *
  * @description 接收 executor 并立即执行，注入 resolve / reject
- * @param executor - 执行器函数 (resolve, reject) => void
- * @throws {Error} executor 抛出的异常会被 reject
- * @example
- * const p = new _Promise((resolve) => resolve(1));
  */
 function _Promise(executor) {
   /** 当前状态 */
@@ -58,11 +54,6 @@ function _Promise(executor) {
  * 注册成功/失败回调
  *
  * @description 返回新的 Promise 以支持链式调用，回调在微任务阶段执行
- * @param onFulfilled - 成功回调
- * @param onRejected - 失败回调
- * @returns 新的 Promise 实例
- * @example
- * p.then((v) => v + 1).then(console.log);
  */
 _Promise.prototype.then = function (onFulfilled, onRejected) {
   // 值穿透：非函数时把值往后传
@@ -106,10 +97,6 @@ _Promise.prototype.then = function (onFulfilled, onRejected) {
  * 捕获错误
  *
  * @description then 的语法糖，仅注册失败回调
- * @param onRejected - 失败回调
- * @returns 新的 Promise 实例
- * @example
- * p.catch((err) => console.error(err));
  */
 _Promise.prototype.catch = function (onRejected) {
   return this.then(null, onRejected);
@@ -119,10 +106,6 @@ _Promise.prototype.catch = function (onRejected) {
  * 将值包装为 Promise
  *
  * @description 若已是 _Promise 则直接返回，否则包装为 fulfilled 状态
- * @param value - 任意值
- * @returns Promise 实例
- * @example
- * _Promise.resolve(1).then(console.log);
  */
 _Promise.resolve = function (value) {
   return value instanceof _Promise ? value : new _Promise((r) => r(value));
@@ -132,10 +115,6 @@ _Promise.resolve = function (value) {
  * 将原因包装为 rejected Promise
  *
  * @description 静态方法直接挂在构造函数上
- * @param reason - 失败原因
- * @returns rejected 状态的 Promise
- * @example
- * _Promise.reject(new Error('fail')).catch(console.error);
  */
 _Promise.reject = function (reason) {
   return new _Promise((_, r) => r(reason));
@@ -145,10 +124,6 @@ _Promise.reject = function (reason) {
  * 等待全部完成
  *
  * @description 所有 Promise 都 fulfilled 才 fulfilled，任一 rejected 即 rejected
- * @param list - Promise 数组
- * @returns 结果数组
- * @example
- * _Promise.all([p1, p2]).then(([r1, r2]) => {});
  */
 _Promise.all = function (list) {
   return new _Promise((resolve, reject) => {
@@ -167,10 +142,6 @@ _Promise.all = function (list) {
  * 等待第一个完成
  *
  * @description 第一个 settle 的 Promise 决定最终状态
- * @param list - Promise 数组
- * @returns 第一个完成的值或原因
- * @example
- * _Promise.race([p1, p2]).then(console.log);
  */
 _Promise.race = function (list) {
   return new _Promise((resolve, reject) => {
