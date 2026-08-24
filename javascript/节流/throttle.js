@@ -7,11 +7,7 @@
  * 时间戳版节流
  *
  * @description 首次立即执行，后续每隔 wait 毫秒执行一次；停止触发后不会再补执行
- * @param fn - 需要节流的函数
- * @param wait - 时间间隔（毫秒）
- * @returns 包装后的节流函数
- * @example
- * window.addEventListener('scroll', throttle(handleScroll, 200));
+ * 
  */
 const throttle = (fn, wait) => {
   /** 上次执行时间戳 */
@@ -30,11 +26,7 @@ const throttle = (fn, wait) => {
  * 定时器版节流
  *
  * @description 首次触发延迟 wait 毫秒后执行；停止触发后仍会补执行最后一次调用
- * @param fn - 需要节流的函数
- * @param wait - 时间间隔（毫秒）
- * @returns 包装后的节流函数
- * @example
- * window.addEventListener('mousemove', throttleByTimer(onMove, 200));
+ * 
  */
 const throttleByTimer = (fn, wait) => {
   /** 定时器句柄 */
@@ -59,13 +51,8 @@ const throttleByTimer = (fn, wait) => {
  * @param options - 配置项
  * @param options.leading - 是否在间隔开始时立即执行
  * @param options.trailing - 是否在间隔结束时补执行
- * @returns 包装后的节流函数，附带 cancel 方法
- * @example
- * const throttled = throttleEnhanced(log, 200, { leading: true, trailing: true });
- * throttled();
- * throttled.cancel();
  */
-const throttleEnhanced = (fn, wait, options = {}) => {
+const throttleEnhanced = (fn, wait, options = { }) => {
   /** 上次执行时间戳 */
   let previous = 0;
   /** 定时器句柄 */

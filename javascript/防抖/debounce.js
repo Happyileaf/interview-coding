@@ -7,11 +7,7 @@
  * 基础版防抖
  *
  * @description 每次调用都会清空上一个定时器，只有停止触发 wait 时间后才执行
- * @param fn - 需要防抖的函数
- * @param wait - 等待时间（毫秒）
- * @returns 包装后的防抖函数
- * @example
- * window.addEventListener('resize', debounce(handleResize, 200));
+ * 
  */
 const debounce = (fn, wait) => {
   /** 定时器句柄 */
@@ -30,14 +26,7 @@ const debounce = (fn, wait) => {
  * 支持立即执行与取消的防抖
  *
  * @description immediate 为 true 时首次触发立即执行，后续在停止触发 wait 时间后再次执行
- * @param fn - 需要防抖的函数
- * @param wait - 等待时间（毫秒）
- * @param immediate - 是否在首次触发时立即执行
- * @returns 包装后的防抖函数，附带 cancel 方法用于取消延迟调用
- * @example
- * const debounced = debounce(log, 200, true);
- * debounced();
- * debounced.cancel();
+ * 
  */
 const debounceEnhanced = (fn, wait, immediate = false) => {
   /** 定时器句柄 */
