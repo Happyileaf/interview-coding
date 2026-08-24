@@ -62,12 +62,7 @@ function _Promise(executor) {
 _Promise.prototype.then = function (onFulfilled, onRejected) {
   // 值穿透：非函数时把值往后传
   onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : (v) => v;
-  onRejected =
-    typeof onRejected === 'function'
-      ? onRejected
-      : (err) => {
-          throw err;
-        };
+  onRejected = typeof onRejected === 'function' ? onRejected : (err) => { throw err; };
 
   const promise2 = new _Promise((resolve, reject) => {
     /** 统一执行回调，按返回值决定 promise2 状态 */
