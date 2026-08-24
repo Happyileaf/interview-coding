@@ -17,9 +17,9 @@ const REJECTED = 'rejected';
  * @param executor - 执行器函数 (resolve, reject) => void
  * @throws {Error} executor 抛出的异常会被 reject
  * @example
- * const p = new MyPromise((resolve) => resolve(1));
+ * const p = new _Promise((resolve) => resolve(1));
  */
-function MyPromise(executor) {
+function _Promise(executor) {
   /** 当前状态 */
   this.state = PENDING;
   /** 成功值 */
@@ -64,7 +64,7 @@ function MyPromise(executor) {
  * @example
  * p.then((v) => v + 1).then(console.log);
  */
-MyPromise.prototype.then = function (onFulfilled, onRejected) {
+_Promise.prototype.then = function (onFulfilled, onRejected) {
   // 值穿透：非函数时把值往后传
   onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : (v) => v;
   onRejected =
@@ -74,13 +74,13 @@ MyPromise.prototype.then = function (onFulfilled, onRejected) {
           throw err;
         };
 
-  const promise2 = new MyPromise((resolve, reject) => {
+  const promise2 = new _Promise((resolve, reject) => {
     /** 统一执行回调，按返回值决定 promise2 状态 */
     const handle = (callback, value) => {
       queueMicrotask(() => {
         try {
           const x = callback(value);
-          if (x instanceof MyPromise) {
+          if (x instanceof _Promise) {
             x.then(resolve, reject);
           } else {
             resolve(x);
@@ -111,21 +111,21 @@ MyPromise.prototype.then = function (onFulfilled, onRejected) {
  * @example
  * p.catch((err) => console.error(err));
  */
-MyPromise.prototype.catch = function (onRejected) {
+_Promise.prototype.catch = function (onRejected) {
   return this.then(null, onRejected);
 };
 
 /**
  * 将值包装为 Promise
  *
- * @description 若已是 MyPromise 则直接返回，否则包装为 fulfilled 状态
+ * @description 若已是 _Promise 则直接返回，否则包装为 fulfilled 状态
  * @param value - 任意值
  * @returns Promise 实例
  * @example
- * MyPromise.resolve(1).then(console.log);
+ * _Promise.resolve(1).then(console.log);
  */
-MyPromise.resolve = function (value) {
-  return value instanceof MyPromise ? value : new MyPromise((r) => r(value));
+_Promise.resolve = function (value) {
+  return value instanceof _Promise ? value : new _Promise((r) => r(value));
 };
 
 /**
@@ -135,10 +135,10 @@ MyPromise.resolve = function (value) {
  * @param reason - 失败原因
  * @returns rejected 状态的 Promise
  * @example
- * MyPromise.reject(new Error('fail')).catch(console.error);
+ * _Promise.reject(new Error('fail')).catch(console.error);
  */
-MyPromise.reject = function (reason) {
-  return new MyPromise((_, r) => r(reason));
+_Promise.reject = function (reason) {
+  return new _Promise((_, r) => r(reason));
 };
 
 /**
@@ -148,14 +148,14 @@ MyPromise.reject = function (reason) {
  * @param list - Promise 数组
  * @returns 结果数组
  * @example
- * MyPromise.all([p1, p2]).then(([r1, r2]) => {});
+ * _Promise.all([p1, p2]).then(([r1, r2]) => {});
  */
-MyPromise.all = function (list) {
-  return new MyPromise((resolve, reject) => {
+_Promise.all = function (list) {
+  return new _Promise((resolve, reject) => {
     const result = [];
     let count = 0;
     list.forEach((p, i) => {
-      MyPromise.resolve(p).then((v) => {
+      _Promise.resolve(p).then((v) => {
         result[i] = v;
         if (++count === list.length) resolve(result);
       }, reject);
@@ -170,10 +170,10 @@ MyPromise.all = function (list) {
  * @param list - Promise 数组
  * @returns 第一个完成的值或原因
  * @example
- * MyPromise.race([p1, p2]).then(console.log);
+ * _Promise.race([p1, p2]).then(console.log);
  */
-MyPromise.race = function (list) {
-  return new MyPromise((resolve, reject) => {
-    list.forEach((p) => MyPromise.resolve(p).then(resolve, reject));
+_Promise.race = function (list) {
+  return new _Promise((resolve, reject) => {
+    list.forEach((p) => _Promise.resolve(p).then(resolve, reject));
   });
 };
