@@ -46,7 +46,7 @@ const throttleEnhanced = (fn, wait, options = { }) => {
     if (!previous && !leading) previous = now;
 
     const remaining = wait - (now - previous);
-    if (remaining <= 0 || remaining > wait) {
+    if (remaining <= 0) {
       if (timer) {
         clearTimeout(timer);
         timer = null;
