@@ -11,11 +11,11 @@
  * @param right - 右侧构造函数
  * @returns 是否为该构造函数的实例
  * @example
- * myInstanceof([], Array);        // true
- * myInstanceof(123, Number);      // false（原始值）
- * myInstanceof(function(){}, Function); // true
+ * _instanceof([], Array);        // true
+ * _instanceof(123, Number);      // false（原始值）
+ * _instanceof(function(){}, Function); // true
  */
-const myInstanceof = (left, right) => {
+const _instanceof = (left, right) => {
   if (typeof right !== 'function') {
     throw new TypeError('Right-hand side of instanceof is not callable');
   }
