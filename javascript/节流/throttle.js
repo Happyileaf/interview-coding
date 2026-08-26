@@ -23,26 +23,6 @@ const throttle = (fn, wait) => {
 };
 
 /**
- * 定时器版节流
- *
- * @description 首次触发延迟 wait 毫秒后执行；停止触发后仍会补执行最后一次调用
- * 
- */
-const throttleByTimer = (fn, wait) => {
-  /** 定时器句柄 */
-  let timer = null;
-
-  return function (...args) {
-    if (!timer) {
-      timer = setTimeout(() => {
-        fn.apply(this, args);
-        timer = null;
-      }, wait);
-    }
-  };
-};
-
-/**
  * 支持取消与配置首尾执行的节流
  *
  * @description 结合时间戳与定时器：默认首节立即执行，尾节补执行；支持取消
