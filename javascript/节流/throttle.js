@@ -13,7 +13,7 @@ const throttle = (fn, wait) => {
   /** 上次执行时间戳 */
   let previous = 0;
 
-  return (...args) => {
+  return function (...args) {
     const now = Date.now();
     if (now - previous >= wait) {
       fn.apply(this, args);
@@ -32,7 +32,7 @@ const throttleByTimer = (fn, wait) => {
   /** 定时器句柄 */
   let timer = null;
 
-  return (...args) => {
+  return function (...args) {
     if (!timer) {
       timer = setTimeout(() => {
         fn.apply(this, args);
@@ -60,7 +60,7 @@ const throttleEnhanced = (fn, wait, options = { }) => {
   /** 默认首节执行、尾节补执行 */
   const { leading = true, trailing = true } = options;
 
-  return (...args) => {
+  return function (...args) {
     const now = Date.now();
 
     if (!previous && !leading) previous = now;
