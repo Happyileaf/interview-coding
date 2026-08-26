@@ -33,7 +33,12 @@ const throttle = (fn, wait) => {
  * @param options.trailing - 是否在间隔结束时补执行
  */
 const throttleEnhanced = (fn, wait, options = { }) => {
-  /** 上次执行时间戳 */
+  /**
+   * 上次执行时间戳
+   *
+   * 特殊值 0 作为哨兵，表示当前没有正在进行的节流周期
+   * （初始状态、尾执行后 leading 为 false 时、cancel 后都会回到该状态）
+   */
   let previous = 0;
   /** 定时器句柄 */
   let timer = null;
@@ -43,19 +48,23 @@ const throttleEnhanced = (fn, wait, options = { }) => {
   const throttled = function (...args) {
     const now = Date.now();
 
-    if (!previous && !leading) previous = now;
+    // 每个周期的第一次调用：若禁用了首节执行，把基准时间初始化为当前时间，
+    // 这样 remaining = wait，本次不会立即执行，而是等待尾节补执行
+    if (previous === 0 && leading === false) previous = now;
 
     const remaining = wait - (now - previous);
     if (remaining <= 0) {
-      if (timer) {
+      if (timer !== null) {
         clearTimeout(timer);
         timer = null;
       }
       previous = now;
       fn.apply(this, args);
-    } else if (!timer && trailing) {
+    } else if (timer === null && trailing === true) {
       timer = setTimeout(() => {
-        previous = leading ? Date.now() : 0;
+        // 尾节执行后：若启用首节执行，用当前时间开启下一周期；
+        // 否则重置为哨兵值 0，让下一次调用重新走上面的初始化逻辑
+        previous = leading === true ? Date.now() : 0;
         timer = null;
         fn.apply(this, args);
       }, remaining);
