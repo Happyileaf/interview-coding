@@ -38,68 +38,6 @@ const asyncPool = async (limit, tasks) => {
 };
 
 /**
- * 队列版并发调度器
- *
- * @description 内部维护等待队列，每完成一个任务自动出队下一个
- * @param limit - 最大并发数
- * @returns 调度器实例，包含 add 与 wait 方法
- * @example
- * const scheduler = createScheduler(2);
- * scheduler.add(() => fetch('/api/1'));
- * scheduler.add(() => fetch('/api/2'));
- * await scheduler.wait();
- */
-const createScheduler = (limit) => {
-  /** 最大并发数 */
-  const maxLimit = limit;
-  /** 当前正在执行的任务数 */
-  let activeCount = 0;
-  /** 等待执行的任务队列 */
-  const queue = [];
-
-  /**
-   * 添加一个异步任务
-   *
-   * @description 若当前并发未满则立即执行，否则入队等待
-   * @param task - 返回 Promise 的任务函数
-   * @returns 任务执行结果
-   * @example
-   * scheduler.add(() => fetch('/api/1'));
-   */
-  const add = (task) =>
-    new Promise((resolve, reject) => {
-      const run = () => {
-        activeCount++;
-        Promise.resolve(task())
-          .then(resolve, reject)
-          .finally(() => {
-            activeCount--;
-            if (queue.length) queue.shift()();
-          });
-      };
-
-      if (activeCount < maxLimit) run();
-      else queue.push(run);
-    });
-
-  /**
-   * 等待所有已添加任务完成
-   *
-   * @returns 所有任务结果数组
-   * @example
-   * await scheduler.wait();
-   */
-  const wait = async () => {
-    // 持续等待，直到队列清空且无活动任务
-    while (activeCount > 0 || queue.length > 0) {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    }
-  };
-
-  return { add, wait };
-};
-
-/**
  * 简易计数版并发控制
  *
  * @description 使用计数器限制并发，自动按入参顺序拉起任务
