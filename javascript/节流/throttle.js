@@ -40,7 +40,7 @@ const throttleEnhanced = (fn, wait, options = { }) => {
   /** 默认首节执行、尾节补执行 */
   const { leading = true, trailing = true } = options;
 
-  return function (...args) {
+  const throttled = function (...args) {
     const now = Date.now();
 
     if (!previous && !leading) previous = now;
@@ -61,4 +61,17 @@ const throttleEnhanced = (fn, wait, options = { }) => {
       }, remaining);
     }
   };
+
+  /**
+   * 取消待执行的尾节调用并重置状态
+   *
+   * @description 清除挂起的定时器，重置上次执行时间，使下一次调用重新开始节流周期
+   */
+  throttled.cancel = function () {
+    clearTimeout(timer);
+    timer = null;
+    previous = 0;
+  };
+
+  return throttled;
 };
