@@ -13,7 +13,7 @@ const debounce = (fn, wait) => {
   /** 定时器句柄 */
   let timer = null;
 
-  return (...args) => {
+  return function (...args) {
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => {
       fn.apply(this, args);
@@ -32,7 +32,7 @@ const debounceEnhanced = (fn, wait, immediate = false) => {
   /** 定时器句柄 */
   let timer = null;
 
-  const debounced = (...args) => {
+  const debounced = function (...args) {
     if (timer) clearTimeout(timer);
 
     if (immediate) {
@@ -51,7 +51,7 @@ const debounceEnhanced = (fn, wait, immediate = false) => {
   };
 
   /** 取消当前延迟中的调用 */
-  debounced.cancel = () => {
+  debounced.cancel = function () {
     if (timer) {
       clearTimeout(timer);
       timer = null;
