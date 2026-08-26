@@ -12,9 +12,9 @@
  * @returns 新对象
  * @example
  * const proto = { greet() { return 'hi'; } };
- * const obj = myCreate(proto, { name: { value: 'Tom', enumerable: true } });
+ * const obj = _create(proto, { name: { value: 'Tom', enumerable: true } });
  */
-const myCreate = (proto, propertiesObject) => {
+const _create = (proto, propertiesObject) => {
   if (proto !== null && typeof proto !== 'object') {
     throw new TypeError('Object prototype may only be an Object or null');
   }

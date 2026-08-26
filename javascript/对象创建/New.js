@@ -14,9 +14,9 @@
  * @returns 新实例或构造函数显式返回的对象
  * @example
  * function Person(name) { this.name = name; }
- * const p = myNew(Person, 'Tom');
+ * const p = _new(Person, 'Tom');
  */
-const myNew = (ctor, ...args) => {
+const _new = (ctor, ...args) => {
   if (typeof ctor !== 'function') {
     throw new TypeError('ctor is not a constructor');
   }
