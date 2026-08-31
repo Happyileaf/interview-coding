@@ -12,7 +12,7 @@
  * @returns 所有任务结果数组（顺序与 tasks 一致）
  * @example
  * const tasks = [1, 2, 3].map((i) => () => fetch(`/api/${i}`));
- * const results = await asyncPool(2, tasks);
+ * const results = await asyncPool(tasks, 2);
  */
 const asyncPool = async (tasks, limit) => {
   /** 所有任务的 Promise */
