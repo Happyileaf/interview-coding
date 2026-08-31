@@ -14,7 +14,7 @@
  * const tasks = [1, 2, 3].map((i) => () => fetch(`/api/${i}`));
  * const results = await asyncPool(2, tasks);
  */
-const asyncPool = async (limit, tasks) => {
+const asyncPool = async (tasks, limit) => {
   /** 所有任务的 Promise */
   const results = [];
   /** 正在执行中的任务索引集合 */
@@ -51,7 +51,7 @@ const asyncPool = async (limit, tasks) => {
  *   () => fetch('/api/3'),
  * ]);
  */
-const runWithConcurrencyLimit = (limit, tasks) => {
+const runWithConcurrencyLimit = (tasks, limit) => {
   /** 结果数组 */
   const results = [];
   /** 当前处理到的任务索引 */
