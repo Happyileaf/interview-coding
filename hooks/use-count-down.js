@@ -28,9 +28,18 @@ const useCountDown = ({ duration, onFinish }) => {
   const [isRunning, setIsRunning] = useState(false);
   /** 定时器句柄 */
   const timerRef = useRef(null);
-  /** 目标结束时间戳（毫秒） */
+  /**
+   * 目标结束时间戳（毫秒），计算方式为"开始/恢复时的当前时间 + 当时剩余时间"
+   * 计时期间 tick 每次用 endTimeRef - Date.now() 计算剩余，以真实时间为准：
+   * setInterval 会被浏览器节流或事件循环阻塞而延迟，若采用"每秒减 1"的写法误差会累积，
+   * 而时间戳写法无论轮询晚多久，剩余值始终正确（误差不累积）
+   */
   const endTimeRef = useRef(0);
-  /** 暂停时缓存的剩余毫秒数，为 0 表示已结束 */
+  /**
+   * 暂停瞬间缓存的剩余毫秒数，与 endTimeRef 配合实现暂停/恢复：
+   * 暂停后 endTimeRef 即失效（恢复时需基于新的当前时间重算 endTimeRef = Date.now() + remainMsRef），
+   * 因此剩余时间必须另存一处；置 0 表示倒计时已自然结束，用于阻止 resume 重启已结束的倒计时
+   */
   const remainMsRef = useRef(duration * 1000);
   /** 结束回调，用 ref 保存避免闭包过期 */
   const onFinishRef = useRef(onFinish);
