@@ -102,6 +102,27 @@ _Promise.prototype.catch = function (onRejected) {
 };
 
 /**
+ * 无论成功失败都会执行
+ *
+ * @description then 的语法糖：onFinally 不接收值/原因，执行后透传原结果；
+ * 其返回的 Promise 会被等待，若 reject 或抛错则以该原因覆盖原结果
+ */
+_Promise.prototype.finally = function (onFinally) {
+  return this.then(
+    (value) => {
+      const result = typeof onFinally === 'function' ? onFinally() : undefined;
+      return _Promise.resolve(result).then(() => value);
+    },
+    (reason) => {
+      const result = typeof onFinally === 'function' ? onFinally() : undefined;
+      return _Promise.resolve(result).then(() => {
+        throw reason;
+      });
+    }
+  );
+};
+
+/**
  * 将值包装为 Promise
  *
  * @description 若已是 _Promise 则直接返回，否则包装为 fulfilled 状态
