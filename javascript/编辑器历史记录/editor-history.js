@@ -1,5 +1,31 @@
 /**
- * 基于双向链表的编辑器历史记录（撤销/重做）
+ * 题目：基于双向链表的 EditorHistory 类
+ *
+ * 题目要求：
+ * - constructor()：初始化空历史，当前指针为 null。
+ * - addAction(action)：传入字符串 action 表示一次文本编辑操作（如 "insert A"、"delete B"），
+ *   将其作为新节点插入链表并设为当前节点；如果当前节点后有重做节点，应丢弃其后所有节点（标准重做栈清空逻辑）。
+ * - undo()：若当前节点存在前一个节点，则将当前指针前移并返回前一个节点的 action；若已是最前则返回 null。
+ * - redo()：若当前节点存在后一个节点，则将当前指针后移并返回后一个节点的 action；若已是最后则返回 null。
+ * - getHistory()：返回从链表头到尾所有 action 组成的数组（用于调试或渲染）。节点类可自定义，但需体现双向链接。
+ *
+ * 示例1：
+ * const eh = new EditorHistory();
+ * eh.addAction("type hello");
+ * eh.addAction("type world");
+ * eh.undo();
+ * eh.undo();
+ * eh.redo();       // => "type hello"
+ * eh.getHistory(); // => ["type hello", "type world"]
+ *
+ * 示例2：
+ * const eh = new EditorHistory();
+ * eh.addAction("a");
+ * eh.addAction("b");
+ * eh.undo();
+ * eh.addAction("c");
+ * eh.redo();       // => null
+ * eh.getHistory(); // => ["a", "c"]
  */
 
 /**
