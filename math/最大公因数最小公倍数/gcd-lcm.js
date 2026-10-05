@@ -28,13 +28,3 @@ const lcm = (a, b) => {
   const greatestCommonDivisor = gcd(a, b);
   return (a * b) / greatestCommonDivisor;
 };
-
-// 测试用例
-// console.log(gcd(12, 18)); // 6
-// console.log(lcm(12, 18)); // 36
-// console.log(gcd(7, 5));   // 1
-// console.log(lcm(7, 5));   // 35
-// console.log(gcd(100, 25));// 25
-// console.log(lcm(100, 25));// 100
-
-export { gcd, lcm };

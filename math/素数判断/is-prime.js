@@ -28,12 +28,3 @@ const isPrime = (n) => {
   }
   return true;
 };
-
-// 测试用例
-// console.log(isPrime(2));    // true
-// console.log(isPrime(4));    // false
-// console.log(isPrime(17));   // true
-// console.log(isPrime(1));    // false
-// console.log(isPrime(9973)); // true
-
-export default isPrime;
